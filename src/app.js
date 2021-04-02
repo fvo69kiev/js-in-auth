@@ -1,3 +1,4 @@
+import {Question} from './question';
 import {isValid} from './utils';
 import './styles.css';
 
@@ -6,7 +7,7 @@ const form = document.getElementById('form'),
       submitBtn = form.querySelector('#submit');
 
 
-
+window.addEventListener('load', Question.renderList); // Save questions in Local Storage----
 form.addEventListener('submit', submitFormHandler);
 input.addEventListener('input', () => {
     submitBtn.disabled = !isValid(input.value)
@@ -21,8 +22,12 @@ function submitFormHandler(event) {
             date: new Date().toJSON()
         };
 
-        console.log(question);
+        submitBtn.disabled = true;
         // Async request to server to save question
-
+        Question.create(question).then(() => {
+            input.value = '';
+            input.className = '';
+            submitBtn.disabled = false;
+        });
     }
 }
